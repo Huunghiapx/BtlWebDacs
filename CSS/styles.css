@@ -1,0 +1,131 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 0 20px;
+}
+
+/* Header Styles */
+.header-container {
+    background-color: #333;
+    padding: 20px 0;
+}
+
+.nav ul {
+    list-style-type: none;
+    text-align: center;
+}
+
+.nav ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+/* Logo Styles */
+.logo {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.logo h1 {
+    color: #333;
+    font-size: 36px;
+}
+
+/* Card Styles */
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.card-header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .nav ul li {
+        display: block;
+        margin-bottom: 10px;
+    }
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.forum-title {
+    flex-grow: 1; /* Cho phép nó mở rộng, làm cho nút "Viết bài" sang bên phải */
+}
+
+.write-post-btn-container {
+    margin-left: 10px; /* Khoảng cách giữa nút và tiêu đề */
+}
+.write-post-btn {
+    background-color: #4CAF50; /* Màu nền */
+    color: white; /* Màu chữ */
+    padding: 10px 20px; /* Kích thước nút */
+    font-size: 16px; /* Cỡ chữ */
+    border: none; /* Loại bỏ viền */
+    border-radius: 4px; /* Bo tròn góc */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+}
+
+.write-post-btn:hover {
+    background-color: #45a049; /* Màu nền hover */
+}
+
