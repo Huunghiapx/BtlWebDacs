@@ -33,21 +33,20 @@
     <title>Tra loi Bài Viết</title>
 </head>
 <body>
-    <h2>Tra loi bai Mới</h2>
- 
-                                <div id="replyForm" class="reply-form">
-                                    <form action="traloi.php" method="post">
-                                        <input type="hidden" name="id" value="<?php echo $chude_id; ?>">
-                                        <div>
-                                            <label for="nguoidung_id">Tác giả:</label><br>
-                                            <input type="text" id="nguoidung_id" name="nguoidung_id" required><br>
-                                        </div>
-                                        <div>
-                                            <label for="noidung">Nội dung:</label><br>
-                                            <textarea id="noidung" name="noidung" rows="4" cols="50" required></textarea><br>
-                                        </div>
-                                        <input type="submit" value="Gửi">
-                                    </form>
-                                </div>
+    <h2>Trả lời bình luận</h2>
+    <div id="replyForm" class="reply-form">
+        <form action="traloi.php" method="post">
+            <input type="hidden" name="id" value="<?php echo $chude_id; ?>">
+            <div>
+                <label for="nguoidung_id">Tác giả:</label><br>
+                <input type="text" id="nguoidung_id" name="nguoidung_id" required><br>
+            </div>
+            <div>
+                <label for="noidung">Nội dung:</label><br>
+                <textarea id="noidung" name="noidung" rows="4" cols="50" required></textarea><br>
+            </div>
+                <input type="submit" value="Gửi">
+        </form>
+    </div>
 </body>
 </html>

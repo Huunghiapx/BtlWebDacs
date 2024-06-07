@@ -53,7 +53,6 @@ if (isset($_GET['chude_id'])) {
                            
                             <div id="replyForm" class="reply-form">
                                 <form action="traloi.php" method="post">
-                                    <input type="hidden" name="baiviet_id" value="<?php echo $chude_id; ?>">
                                     <div>
                                         <label for="nguoidung_id">Tác giả:</label><br>
                                         <input type="text" id="nguoidung_id" name="nguoidung_id" required><br>
