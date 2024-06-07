@@ -88,7 +88,7 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                                     <th>Chủ đề</th>
                                     <th>Chuyên mục</th>
                                     <th>Bình luận</th>
-                                    <th>Lượt xem</th>
+                                    <th>Lượt thích</th>
                                     <th>Tác giả</th>
                                 </tr>
                             </thead>
@@ -99,7 +99,7 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                                         while($row = mysqli_fetch_assoc($query_baiviet)){ ?>
                                             <tr>
                                                 <td><?php echo $row['id']; ?></td>
-                                                <td><a href="baiviet.php?chuyenmuc_id=<?php echo $row['id']; ?>"><?php echo isset($row['chude']) ? $row['chude'] : 'Không xác định'; ?></a></td>
+                                                <td><a href="baiviet.php?chude_id=<?php echo $row['id']; ?>"><?php echo isset($row['chude']) ? $row['chude'] : 'Không xác định'; ?></a></td>
                                                 <td><?php echo $row['ten_chuyenmuc']; ?></td>
                                                 <td><?php echo isset($binhluan_counts[$row['id']]) ? $binhluan_counts[$row['id']] : 0; ?></td>
                                                 <td><?php echo isset($row['luotxem']) ? $row['luotxem'] : 0; ?></td>

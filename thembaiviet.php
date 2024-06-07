@@ -1,6 +1,7 @@
 <?php 
     require_once('/xampp/htdocs/webdacs/BE/ketnoi.php');
-    $sql_chuyenmuc = "SELECT * FROM ChuyenMuc";
+
+    $sql_chuyenmuc = "SELECT * FROM chuyenmuc";
     $query_chuyenmuc = mysqli_query($connect, $sql_chuyenmuc);
 
     // Check if form is submitted

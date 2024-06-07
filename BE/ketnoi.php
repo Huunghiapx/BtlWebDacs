@@ -9,7 +9,7 @@ $connect = new mysqli($servername, $username, $password, $dbname);
 
 // Kiểm tra kết nối
 if ($connect->connect_error) {
-    die("Kết nối thất bại: " . $conn->connect_error);
+    die("Kết nối thất bại: " . $connect->connect_error);
 }
 echo "Kết nối thành công";
 ?>
