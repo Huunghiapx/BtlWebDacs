@@ -1,63 +1,90 @@
+<?php
+session_start();
+require_once('/xampp/htdocs/webdacs/BE/ketnoi.php');
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['dangnhap'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $sql = "SELECT * FROM nguoidung WHERE email='$email'";
+    $result = $connect->query($sql);
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+                $_SESSION['username'] = $row['username'];
+                echo "Đăng nhập thành công!";
+                // Chuyển hướng người dùng đến trang chủ hoặc trang nào đó sau khi đăng nhập thành công
+                header("Location: DienDan.php");
+                exit();
+        } else {
+                echo "Sai mật khẩu!";
+        }
+    } else {
+            echo "Không tìm thấy email!";
+    }
+
+
+$connect->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập</title>
-    <link rel="stylesheet" href="DangNhap.css">
+    <link rel="stylesheet" href="CSS/DangNhap.css">
+    <title>Diễn đàn ô tô</title>
+    <script src="JS/javascript.js"></script>
 </head>
-<style>
-.dky-qmk {
-    display:flex;
-    justify-content: space-around;
-    margin-top: 20px;
-    text-align: none;
-    }
-</style>
 <body>
-    <?php
-        include "connect.php";
-        session_start();
-        if(isset($_POST["dangnhap"]) ){
-            $taikhoan = $_POST["taikhoan"];
-            $matkhau = $_POST["matkhau"];
-            
-            
-                
-            $sql = "SELECT * FROM thanhvien WHERE taikhoan='$taikhoan' and matkhau='$matkhau' ";
-            
-            $result = mysqli_query($conn, $sql);
-            if(mysqli_num_rows($result) > 0) 
-            {
-                $_SESSION['taikhoan'] = $taikhoan;
-                header("location:TrangChu.php");
-
-            } else {    
-                echo"Tài khoản hoặc mật khẩu sai";
-            }
-
-        }
-    ?>
-
-
-   <div class="container-login">
-        
-        <h1>Đăng nhập</h1>
-        <form action="DangNhap.php" method="post">
-            <label>Tên tài khoản</label>
-            <input type="text" name="taikhoan" placeholder="Nhập tên tài khoản">
-
-            <label>Mật khẩu</label>
-            <input type="password" name="matkhau" placeholder="Nhập mật khẩu">
-
-            <button type="submit" name="dangnhap">Đăng nhập</button>
-            
-        </form>
-        <div class="dky-qmk">
-            <div><a href="DangKy.php">Đăng ký</a></div>
-            <div><a href="DoiMatKhau.php">Đổi mật khẩu</a></div>
+    <h2>Đăng nhập/ Đăng ký</h2>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="DangKy.php" method ="POST">
+                <h1>Tạo tài khoản</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>Sử dụng email của bạn để đăng ký</span>
+                <input type="text" name="username" placeholder="Họ và tên" />
+                <input type="email" name="email"  placeholder="Email" />
+                <input type="password" name="password" placeholder="Password" />
+                <button name ="dangky">Đăng ký</button>
+            </form>
         </div>
-        
-   </div>
+        <div class="form-container sign-in-container">
+            <form action="DangNhap.php" method ="POST">
+                <h1>Đăng Nhập</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>Tài khoản của bạn</span>
+                <input type="email" name="email" placeholder="Email" />
+                <input type="password" name="password" placeholder="Password" />
+                <a href="#">Quên mật khẩu?</a>
+                <button name="dangnhap">Đăng nhập</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>VUi lòng nhập thông tin đăng nhập</p>
+                    <button class="ghost" id="signIn">Đăng Nhập</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Chào mừng đến với diễn đàn ô tô!</h1>
+                    <p>Hãy nhập thông tin cá nhân của bạn</p>
+                    <button class="ghost" id="signUp">Đăng ký</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
 </body>
 </html>

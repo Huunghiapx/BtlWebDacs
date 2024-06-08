@@ -64,8 +64,7 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                     <li><a href="TinTuc.php">Tin tức</a></li>
                     <li><a href="ThanhVien.php">Thành viên</a></li>
                     <li><a href="#">Tìm kiếm</a></li>
-                    <li><a href="#">Dang ky</a></li>
-                    <li><a href="#">Dang Nhap</a></li>
+                    <li><a href="DangNhap.php">Đăng nhập</a></li>
                 </ul>
             </div>
         </div>
