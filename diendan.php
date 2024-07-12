@@ -37,13 +37,21 @@ while($row = mysqli_fetch_assoc($query_count_baiviet)) {
     $baiviet_counts[$row['chuyenmuc_id']] = $row['total_baiviet'];
 }
 // Truy vấn số bình luận cho mỗi chuyên mục
-$sql_count_binhluan = "SELECT baiviet.chuyenmuc_id, COUNT(*) AS total_binhluan FROM BinhLuan JOIN baiviet ON BinhLuan.baiviet_id = baiviet.id GROUP BY baiviet.chuyenmuc_id";
+$sql_count_binhluan = "SELECT baiviet.id AS baiviet_id, COUNT(binhluan.id) AS total_binhluan 
+                       FROM baiviet 
+                       LEFT JOIN binhluan ON baiviet.id = binhluan.baiviet_id 
+                       GROUP BY baiviet.id";
 $query_count_binhluan = mysqli_query($connect, $sql_count_binhluan);
 
-// Lưu kết quả vào một mảng để dễ dàng truy cập
-$binhluan_counts = array();
-while($row = mysqli_fetch_assoc($query_count_binhluan)) {
-    $binhluan_counts[$row['chuyenmuc_id']] = $row['total_binhluan'];
+if ($query_count_binhluan) {
+    // Lưu kết quả vào một mảng để dễ dàng truy cập
+    $binhluan_counts = array();
+    while($row = mysqli_fetch_assoc($query_count_binhluan)) {
+        $binhluan_counts[$row['baiviet_id']] = $row['total_binhluan'];
+    }
+} else {
+    // Xử lý lỗi truy vấn
+    echo "Lỗi truy vấn: " . mysqli_error($connect);
 }
 ?>
 <!DOCTYPE html>
@@ -55,7 +63,7 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
     <link rel="stylesheet" href="CSS/styles.css">
 </head>
 <body>
-    <div class="logo"><h1>Logo</h1></div>
+    <div class="logo"><h1>Diễn đàn ô tô</h1></div>
     <header>
         <div class="header-container">
             <div class="nav">
@@ -78,7 +86,7 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                     <div class="card-header">
                         <div>Tin mới diễn đàn </div>
                         <div class="write-post-btn-container">
-                           <a class="write-post-btn" href="Thembaiviet.php">Viết bài</a>
+                        <button class="write-post-btn" onclick="location.href='thembaiviet.php'">Viết bài</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -128,7 +136,7 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                                     <th>#</th>
                                     <th>Chuyên mục</th>
                                     <th>Bài viết</th>
-                                    <th>Bình luận</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -139,7 +147,6 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                                                 <td><?php echo $row['id']; ?></td>
                                                 <td><?php echo isset($row['ten']) ? $row['ten'] : 'Không xác định'; ?></td>
                                                 <td><?php echo isset($baiviet_counts[$row['id']]) ? $baiviet_counts[$row['id']] : 0; ?></td>
-                                                <td><?php echo isset($binhluan_counts[$row['id']]) ? $binhluan_counts[$row['id']] : 0; ?></td>
                                             </tr>
                                         <?php } ?>
                                     <?php } ?>
@@ -162,7 +169,7 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                                     <th>#</th>
                                     <th>Chuyên mục</th>
                                     <th>Bài viết</th>
-                                    <th>Bình luận</th>
+                                 
                                 </tr>
                             </thead>
                             <tbody>
@@ -173,7 +180,6 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                                                 <td><?php echo $row['id']; ?></td>
                                                 <td><?php echo isset($row['ten']) ? $row['ten'] : 'Không xác định'; ?></td>
                                                 <td><?php echo isset($baiviet_counts[$row['id']]) ? $baiviet_counts[$row['id']] : 0; ?></td>
-                                                <td><?php echo isset($binhluan_counts[$row['id']]) ? $binhluan_counts[$row['id']] : 0; ?></td>
                                             </tr>
                                         <?php } ?>
                                     <?php } ?>
@@ -196,7 +202,7 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                                     <th>#</th>
                                     <th>Chuyên mục</th>
                                     <th>Bài viết</th>
-                                    <th>Bình luận</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -207,7 +213,6 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                                                 <td><?php echo $row['id']; ?></td>
                                                 <td><?php echo isset($row['ten']) ? $row['ten'] : 'Không xác định'; ?></td>
                                                 <td><?php echo isset($baiviet_counts[$row['id']]) ? $baiviet_counts[$row['id']] : 0; ?></td>
-                                                <td><?php echo isset($binhluan_counts[$row['id']]) ? $binhluan_counts[$row['id']] : 0; ?></td>
                                             </tr>
                                         <?php } ?>
                                     <?php } ?>
@@ -229,7 +234,7 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                                     <th>#</th>
                                     <th>Chuyên mục</th>
                                     <th>Bài viết</th>
-                                    <th>Bình luận</th>
+                
                                 </tr>
                             </thead>
                             <tbody>
@@ -240,7 +245,6 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                                                 <td><?php echo $row['id']; ?></td>
                                                 <td><?php echo isset($row['ten']) ? $row['ten'] : 'Không xác định'; ?></td>
                                                 <td><?php echo isset($baiviet_counts[$row['id']]) ? $baiviet_counts[$row['id']] : 0; ?></td>
-                                                <td><?php echo isset($binhluan_counts[$row['id']]) ? $binhluan_counts[$row['id']] : 0; ?></td>
                                             </tr>
                                         <?php } ?>
                                     <?php } ?>
@@ -262,7 +266,7 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                                     <th>#</th>
                                     <th>Chuyên mục</th>
                                     <th>Bài viết</th>
-                                    <th>Bình luận</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -273,7 +277,6 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
                                                 <td><?php echo $row['id']; ?></td>
                                                 <td><?php echo isset($row['ten']) ? $row['ten'] : 'Không xác định'; ?></td>
                                                 <td><?php echo isset($baiviet_counts[$row['id']]) ? $baiviet_counts[$row['id']] : 0; ?></td>
-                                                <td><?php echo isset($binhluan_counts[$row['id']]) ? $binhluan_counts[$row['id']] : 0; ?></td>
                                             </tr>
                                         <?php } ?>
                                     <?php } ?>

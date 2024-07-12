@@ -45,6 +45,8 @@ $binhluan_counts = array();
 while($row = mysqli_fetch_assoc($query_count_binhluan)) {
     $binhluan_counts[$row['chuyenmuc_id']] = $row['total_binhluan'];
 }
+$sql_thanhvien = "SELECT * FROM nguoidung";
+$query_thanhvien = mysqli_query($connect, $sql_thanhvien);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +57,7 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
     <link rel="stylesheet" href="CSS/styles.css">
 </head>
 <body>
-    <div class="logo"><h1>Diễn đàn ô tô</h1></div>
+<div class="logo"><h1>Diễn đàn ô tô</h1></div>
     <header>
         <div class="header-container">
             <div class="nav">
@@ -73,7 +75,40 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
         <div class="container">
             <!-- Phần hiển thị các bài viết -->
             <section>
-              
+                <div class="card">
+                    <div class="card-header">
+                        <div>Thanh vien </div>
+                        <div class="write-post-btn-container">
+                        <button class="write-post-btn" onclick="location.href='DangNhap.php'">Thêm thành viên</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                    <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên tài khoản</th>
+                                    <th>Email</th>
+                                    <th>Mật Khẩu</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                    
+                                    if($query_thanhvien){
+                                        while($row = mysqli_fetch_assoc($query_thanhvien)){ ?>
+                                            <tr>
+                                                <td><?php echo $row['id']; ?></td>
+                                                <td><?php echo $row['username']; ?></td>
+                                                <td><?php echo $row['email']; ?></td>
+                                                <td><?php echo $row['password']; ?></td>
+                                            </tr>
+                                        <?php } ?>
+                                    <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </section>
 
             <!-- Phần hiển thị các chuyên mục từ bảng Diễn Đàn -->
@@ -90,4 +125,3 @@ while($row = mysqli_fetch_assoc($query_count_binhluan)) {
     </footer>
 </body>
 </html>
-

@@ -106,6 +106,19 @@ footer {
     justify-content: space-between;
     align-items: center;
 }
+.card-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-user .left {
+    margin: 0;
+}
+
+.card-user .right {
+    margin: 0;
+}
 
 .forum-title {
     flex-grow: 1; /* Cho phép nó mở rộng, làm cho nút "Viết bài" sang bên phải */
