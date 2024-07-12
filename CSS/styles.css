@@ -126,6 +126,10 @@ footer {
 
 .write-post-btn-container {
     margin-left: 10px; /* Khoảng cách giữa nút và tiêu đề */
+    display: flex;
+    justify-content: space-between; /* Căn hai phần tử con một cách đều nhau */
+    align-items: center; /* Căn theo chiều dọc */
+    
 }
 .write-post-btn {
     background-color: #4CAF50; /* Màu nền */
@@ -141,4 +145,15 @@ footer {
 .write-post-btn:hover {
     background-color: #45a049; /* Màu nền hover */
 }
+.like-btn {
+    background-color: transparent; /* Nền trong suốt */
+    border: none; /* Loại bỏ đường viền */
+    cursor: pointer; /* Con trỏ tay khi rê chuột vào */
+    outline: none; /* Loại bỏ đường viền focus */
+    font-size: 15px; /* Kích thước icon */
+    color: #3498db; /* Màu sắc của icon */
+}
 
+.like-btn:hover {
+    color: #2980b9; /* Màu sắc của icon khi di chuột vào */
+}
