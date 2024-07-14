@@ -1,8 +1,8 @@
 <?php
 require_once('/xampp/htdocs/webdacs/BE/ketnoi.php');
 
-// Xử lý khi người dùng nhấn nút "Thích"
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'like' && isset($_POST['baiviet_id'])) {
+// Xử lý khi người dùng nhấn nút "Thích" bài viết
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'likepost' && isset($_POST['baiviet_id'])) {
     $baiviet_id = intval($_POST['baiviet_id']);
 
     // Cập nhật số lượt thích trong bảng baiviet
@@ -11,6 +11,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
     $stmt_update_likes->bind_param('i', $baiviet_id);
     if (!$stmt_update_likes->execute()) {
         die('Lỗi khi cập nhật số lượt thích: ' . $stmt_update_likes->error);
+    }
+    // Redirect để tránh gửi lại dữ liệu khi người dùng làm mới trang
+    header("Location: {$_SERVER['REQUEST_URI']}");
+    exit;
+}
+
+// Xử lý khi người dùng thích bình luận
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'likecomment' && isset($_POST['comment_id'])) {
+    $comment_id = intval($_POST['comment_id']);
+
+    // Cập nhật số lượt thích trong bảng binhluan
+    $sql_update_comment_likes = "UPDATE binhluan SET thichbinhluan = thichbinhluan + 1 WHERE id = ?";
+    $stmt_update_comment_likes = $connect->prepare($sql_update_comment_likes);
+    $stmt_update_comment_likes->bind_param('i', $comment_id);
+    if (!$stmt_update_comment_likes->execute()) {
+        die('Lỗi khi cập nhật số lượt thích cho bình luận: ' . $stmt_update_comment_likes->error);
     }
     // Redirect để tránh gửi lại dữ liệu khi người dùng làm mới trang
     header("Location: {$_SERVER['REQUEST_URI']}");
@@ -70,14 +86,15 @@ if (isset($_GET['chude_id'])) {
         $baiviet = $result->fetch_assoc();
 
         // Truy vấn để lấy bình luận liên quan đến bài viết
-        $sql_comments = "SELECT binhluan.noidung AS comment_content, binhluan.ngaytao AS comment_date, nguoidung.username AS author_name 
-                         FROM binhluan 
-                         JOIN nguoidung ON binhluan.nguoidung_id = nguoidung.id 
-                         WHERE binhluan.baiviet_id = ?";
+        $sql_comments = "SELECT binhluan.id AS comment_id, binhluan.noidung AS comment_content, binhluan.ngaytao AS comment_date, nguoidung.username AS author_name , binhluan.thichbinhluan AS comment_like
+        FROM binhluan 
+        JOIN nguoidung ON binhluan.nguoidung_id = nguoidung.id 
+        WHERE binhluan.baiviet_id = ?";
         $stmt_comments = $connect->prepare($sql_comments);
         $stmt_comments->bind_param('i', $chude_id);
         $stmt_comments->execute();
         $comments_result = $stmt_comments->get_result();
+
         ?>
         
         <!DOCTYPE html>
@@ -115,13 +132,68 @@ if (isset($_GET['chude_id'])) {
                 }
                 </style>
             <script>
-                function toggleReplyForm() {
+                 function toggleReplyForm() {
                     var replyForm = document.getElementById('replyForm');
                     if (replyForm.style.display === 'none' || replyForm.style.display === '') {
                         replyForm.style.display = 'block';
                     } else {
                         replyForm.style.display = 'none';
                     }
+                }
+
+                function toggleReplyForm(commentId) {
+                    var replyForm = document.getElementById('replyForm-' + commentId);
+                    if (replyForm.style.display === 'none' || replyForm.style.display === '') {
+                        replyForm.style.display = 'block';
+                    } else {
+                        replyForm.style.display = 'none';
+                    }
+                }
+
+                function likePost(baivietId) {
+                    var formData = new FormData();
+                    formData.append('action', 'like');
+                    formData.append('baiviet_id', baivietId);
+
+                    fetch('<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?chude_id=' . $chude_id; ?>', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(result => {
+                        console.log(result);
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                    });
+                }
+
+                function likeComment(commentId) {
+                    var formData = new FormData();
+                    formData.append('action', 'like');
+                    formData.append('comment_id', commentId);
+
+                    fetch('<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?chude_id=' . $chude_id; ?>', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(result => {
+                        console.log(result);
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                    });
                 }
             </script>
         </head>
@@ -144,21 +216,19 @@ if (isset($_GET['chude_id'])) {
                 <div class="card">
                     <div class="card-content">
                         <div class="card-header">
-                            
                             <div><h2><?php echo htmlspecialchars($baiviet['chude']); ?></h2></div>
                             <div class="write-post-btn-container">
-                            <button class="write-post-btn" onclick="toggleReplyForm()">
-                                <i class="far fa-comment"></i> Trả lời
-                            </button>
+                                <button class="write-post-btn" onclick="toggleReplyForm()">
+                                    <i class="far fa-comment"></i> Trả lời
+                                </button>
                                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?chude_id=' . $chude_id; ?>">
                                     <input type="hidden" name="baiviet_id" value="<?php echo $chude_id; ?>">
-                                    <input type="hidden" name="action" value="like">
+                                    <input type="hidden" name="action" value="likepost">
                                     <button class="write-post-btn" onclick="likePost(<?php echo $baiviet['id']; ?>)">
-                                        <i class="fas fa-thumbs-up"></i> Like
+                                        <i class="fas fa-thumbs-up"></i> Thích
                                     </button>
                                     <?php echo htmlspecialchars($baiviet['luotthich']); ?>
                                 </form>
-                               
                             </div>
                         </div>
                         <div class="card-body">
@@ -167,7 +237,6 @@ if (isset($_GET['chude_id'])) {
                                     <td><p><?php echo nl2br(htmlspecialchars($baiviet['noidung'])); ?></p></td>
                                 </tr>
                             </table>
-                      
                         </div>
                     </div>
                     <div class="card-user">
@@ -189,68 +258,55 @@ if (isset($_GET['chude_id'])) {
                         <input type="submit" value="Gửi">
                     </form>
                 </div>
-                 <!-- Hiển thị bình luận -->
-
-                 <div class="comments-section">
-                    
-                 <h3 style="margin-top: 10px;">Bình luận</h3>
+                
+                <!-- Hiển thị bình luận -->
+                <div class="comments-section">
+                    <h3>Bình luận</h3>
                     <?php
                     if ($comments_result && $comments_result->num_rows > 0) {
                         while ($comment = $comments_result->fetch_assoc()) {
                             ?>
-
-                            <div class="card">
-                                <div class="card-content">
-                                    <div class="card-header">
-                                        <div><h2> Trả lời <?php echo htmlspecialchars($baiviet['tacgia']); ?></h2></div>
-                                        <div class="write-post-btn-container">
-                                        <button class="write-post-btn" onclick="toggleReplyForm()">
-                                            <i class="far fa-comment"></i> Trả lời
+                            <div class="comment">
+                                <div class="comment-header">
+                                    <span><?php echo htmlspecialchars($comment['author_name']); ?></span>
+                                    <span><?php echo htmlspecialchars($comment['comment_date']); ?></span>
+                                </div>
+                                <div class="comment-content">
+                                    <p><?php echo htmlspecialchars($comment['comment_content']); ?></p>
+                                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?chude_id=' . $chude_id; ?>">
+                                        <input type="hidden" name="baiviet_id" value="<?php echo $chude_id; ?>">
+                                        <input type="hidden" name="action" value="likecomment">
+                                        <button type="submit" class="like-btn" onclick="likeComment(<?php echo $comment['comment_id']; ?>)">
+                                            <i class="fas fa-thumbs-up"></i> Thích
                                         </button>
-                                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?chude_id=' . $chude_id; ?>">
-                                                <input type="hidden" name="baiviet_id" value="<?php echo $chude_id; ?>">
-                                                <input type="hidden" name="action" value="like">
-                                                <button class="write-post-btn" onclick="likePost(<?php echo $baiviet['id']; ?>)">
-                                                    <i class="fas fa-thumbs-up"></i> Like
-                                                </button>
-                                                <?php echo htmlspecialchars($baiviet['luotthich']); ?>
-                                            </form>
-                                        
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <table class="table">
-                                            <tr>
-                                                <td><p><?php echo nl2br(htmlspecialchars($comment['comment_content'])); ?></p></td>
-                                            </tr>
-                                        </table>
-                                
-                                    </div>
+                                        <?php echo htmlspecialchars($comment['comment_like']); ?>
+                                    </form>
+                                    <button class="reply-btn" onclick="toggleReplyForm(<?php echo $comment['comment_id']; ?>)">
+                                        <i class="far fa-comment"></i> Trả lời
+                                    </button>
+                                    <form id="replyForm-<?php echo $comment['comment_id']; ?>" class="reply-form" style="display: none;" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?chude_id=' . $chude_id; ?>">
+                                        <input type="hidden" name="baiviet_id" value="<?php echo $chude_id; ?>">
+                                        <input type="hidden" name="nguoidung_id" value="<?php echo $comment['nguoidung_id']; ?>">
+                                        <textarea name="noidung" placeholder="Nhập nội dung trả lời..." required></textarea>
+                                        <button type="submit">Gửi trả lời</button>
+                                    </form>
                                 </div>
-                                <div class="card-user">
-                                    <p class="left">Tác giả: <?php echo htmlspecialchars($comment['author_name']); ?></p>
-                                    <p class="right"><?php echo htmlspecialchars($comment['comment_date']); ?></small></p>  
-                                </div>
+
                             </div>
                             <?php
-
-                            
                         }
                     } else {
                         echo "<p>Chưa có bình luận nào.</p>";
                     }
                     ?>
                 </div>
-               
-                </div>
+            </div>
             <footer>
                 <div class="container">
                     <p>&copy; Web by Huu Nghia and Minh Hien</p>
                 </div>
             </footer>
-            
         </body>
-
         </html>
         <?php
     } else {
