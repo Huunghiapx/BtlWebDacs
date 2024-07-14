@@ -1,4 +1,4 @@
-<?php
+to<?php
 $servername = "localhost";  // Thay đổi nếu không dùng localhost
 $username = "root";         // Thay bằng tên người dùng của bạn
 $password = "";             // Thay bằng mật khẩu của bạn

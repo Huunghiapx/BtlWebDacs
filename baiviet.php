@@ -142,8 +142,6 @@ if (isset($_GET['chude_id'])) {
             </header>
             <div class="container">
                 <div class="card">
-                    
-
                     <div class="card-content">
                         <div class="card-header">
                             <div><h2><?php echo htmlspecialchars($baiviet['chude']); ?></h2></div>
@@ -191,24 +189,58 @@ if (isset($_GET['chude_id'])) {
                     </form>
                 </div>
                  <!-- Hiển thị bình luận -->
+
                  <div class="comments-section">
                     <h3>Bình luận</h3>
                     <?php
                     if ($comments_result && $comments_result->num_rows > 0) {
                         while ($comment = $comments_result->fetch_assoc()) {
                             ?>
-                            <div class="comment">
-                                <p><strong><?php echo htmlspecialchars($comment['author_name']); ?>:</strong> <?php echo nl2br(htmlspecialchars($comment['comment_content'])); ?></p>
-                                <p><small><?php echo htmlspecialchars($comment['comment_date']); ?></small></p>
+
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-header">
+                                        <div><h2><?php echo htmlspecialchars($baiviet['chude']); ?></h2></div>
+                                        <div class="write-post-btn-container">
+                                        <button class="write-post-btn" onclick="toggleReplyForm()">
+                                            <i class="far fa-comment"></i> Trả lời
+                                        </button>
+                                            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?chude_id=' . $chude_id; ?>">
+                                                <input type="hidden" name="baiviet_id" value="<?php echo $chude_id; ?>">
+                                                <input type="hidden" name="action" value="like">
+                                                <button class="write-post-btn" onclick="likePost(<?php echo $baiviet['id']; ?>)">
+                                                    <i class="fas fa-thumbs-up"></i> Like
+                                                </button>
+                                                <?php echo htmlspecialchars($baiviet['luotthich']); ?>
+                                            </form>
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table">
+                                            <tr>
+                                                <td><p><?php echo nl2br(htmlspecialchars($comment['comment_content'])); ?></p></td>
+                                            </tr>
+                                        </table>
+                                
+                                    </div>
+                                </div>
+                                <div class="card-user">
+                                    <p class="left">Tác giả: <?php echo htmlspecialchars($comment['author_name']); ?></p>
+                                    <p class="right"><?php echo htmlspecialchars($comment['comment_date']); ?></small></p>  
+                                </div>
                             </div>
                             <?php
+
+                            
                         }
                     } else {
                         echo "<p>Chưa có bình luận nào.</p>";
                     }
                     ?>
                 </div>
-            </div>
+               
+                </div>
             <footer>
                 <div class="container">
                     <p>&copy; Web by Huu Nghia and Minh Hien</p>

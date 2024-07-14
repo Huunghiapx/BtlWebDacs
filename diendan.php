@@ -111,7 +111,7 @@ if ($query_count_binhluan) {
                                                 <td><a href="baiviet.php?chude_id=<?php echo $row['id']; ?>"><?php echo isset($row['chude']) ? $row['chude'] : 'Không xác định'; ?></a></td>
                                                 <td><?php echo $row['ten_chuyenmuc']; ?></td>
                                                 <td><?php echo isset($binhluan_counts[$row['id']]) ? $binhluan_counts[$row['id']] : 0; ?></td>
-                                                <td><?php echo isset($row['luotxem']) ? $row['luotxem'] : 0; ?></td>
+                                                <td><?php echo isset($row['luotthich']) ? $row['luotthich'] : 0; ?></td>
                                                 <td><?php echo $row['tacgia']; ?></td>
                                             </tr>
                                         <?php } ?>
