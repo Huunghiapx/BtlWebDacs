@@ -1,4 +1,4 @@
-to<?php
+<?php
 $servername = "localhost";  // Thay đổi nếu không dùng localhost
 $username = "root";         // Thay bằng tên người dùng của bạn
 $password = "";             // Thay bằng mật khẩu của bạn
@@ -11,5 +11,5 @@ $connect = new mysqli($servername, $username, $password, $dbname);
 if ($connect->connect_error) {
     die("Kết nối thất bại: " . $connect->connect_error);
 }
-echo "Kết nối thành công";
+echo "";
 ?>

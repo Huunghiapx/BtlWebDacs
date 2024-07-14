@@ -144,6 +144,7 @@ if (isset($_GET['chude_id'])) {
                 <div class="card">
                     <div class="card-content">
                         <div class="card-header">
+                            
                             <div><h2><?php echo htmlspecialchars($baiviet['chude']); ?></h2></div>
                             <div class="write-post-btn-container">
                             <button class="write-post-btn" onclick="toggleReplyForm()">
@@ -191,7 +192,8 @@ if (isset($_GET['chude_id'])) {
                  <!-- Hiển thị bình luận -->
 
                  <div class="comments-section">
-                    <h3>Bình luận</h3>
+                    
+                 <h3 style="margin-top: 10px;">Bình luận</h3>
                     <?php
                     if ($comments_result && $comments_result->num_rows > 0) {
                         while ($comment = $comments_result->fetch_assoc()) {
@@ -200,7 +202,7 @@ if (isset($_GET['chude_id'])) {
                             <div class="card">
                                 <div class="card-content">
                                     <div class="card-header">
-                                        <div><h2><?php echo htmlspecialchars($baiviet['chude']); ?></h2></div>
+                                        <div><h2> Trả lời <?php echo htmlspecialchars($baiviet['tacgia']); ?></h2></div>
                                         <div class="write-post-btn-container">
                                         <button class="write-post-btn" onclick="toggleReplyForm()">
                                             <i class="far fa-comment"></i> Trả lời
