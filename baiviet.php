@@ -54,6 +54,40 @@ function handleNewComment($connect) {
         }
     }
 }
+// Xử lý khi người dùng gửi form thêm trả lời
+function handleReplyComment($connect) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['reply_content']) && isset($_POST['binhluan_id'])) {
+        $binhluan_id = intval($_POST['binhluan_id']);
+        $nguoidung_id = $_SESSION['nguoidung_id'];
+        $reply_content = $_POST['reply_content'];
+
+        $sql_check_user = "SELECT id FROM nguoidung WHERE id = ?";
+        $stmt_check_user = $connect->prepare($sql_check_user);
+        $stmt_check_user->bind_param('i', $nguoidung_id);
+        $stmt_check_user->execute();
+        $result_check_user = $stmt_check_user->get_result();
+
+        if ($result_check_user->num_rows == 0) {
+            die('Lỗi: Người dùng không tồn tại.');
+        }
+
+        $sql_add_reply = "INSERT INTO traloi (binhluan_id, nguoidung_id, noidung) VALUES (?, ?, ?)";
+        $stmt_add_reply = $connect->prepare($sql_add_reply);
+        if ($stmt_add_reply === false) {
+            die('Lỗi khi chuẩn bị câu lệnh SQL: ' . $connect->error);
+        }
+        $stmt_add_reply->bind_param('iis', $binhluan_id, $nguoidung_id, $reply_content);
+
+        if (!$stmt_add_reply->execute()) {
+            die('Lỗi khi thực thi câu lệnh SQL: ' . $stmt_add_reply->error);
+        } else {
+            echo 'Thêm trả lời thành công.';
+        }
+    }
+}
+
+
+
 
 // Xử lý hiển thị bài viết và bình luận
 function displayPostAndComments($connect) {
@@ -88,7 +122,52 @@ function displayPostAndComments($connect) {
                 <link rel="stylesheet" href="CSS/styles.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
                 <style>
-                    /* CSS styles here */
+                /* CSS styles here */
+                .like-comment {
+                    display: flex;
+                    align-items: center; /* Căn các phần tử theo chiều dọc */
+                }
+
+                .like-comment .write-post-btn-container {
+                    display: flex;
+                    align-items: center; /* Căn các phần tử theo chiều dọc */
+                }
+
+                .like-comment .write-post-btn {
+                    background-color: transparent;
+                    color: #3498db;
+                    border: none;
+                    padding: 8px 15px;
+                    border-radius: 3px;
+                    cursor: pointer;
+                    margin-right: 10px;
+                    transition: background-color 0.3s, color 0.3s;
+                }
+
+                .like-comment .write-post-btn:hover {
+                    background-color: #4550a0;
+                    color: white;
+                }
+
+                .like-comment .write-post-btn i {
+                    margin-right: 5px; /* Space between icon and text */
+                }
+
+                .like-comment .write-post-btn-container {
+                    margin-left: 10px; /* Khoảng cách giữa nút và tiêu đề */
+                    display: flex;
+                    justify-content: space-between; /* Căn hai phần tử con một cách đều nhau */
+                    align-items: center; /* Căn theo chiều dọc */
+                }
+
+                .like-comment .write-post-btn-container .write-post-btn {
+                    margin-right: 10px; /* Space between buttons */
+                }
+
+                .like-comment .write-post-btn-container .write-post-btn:last-child {
+                    margin-right: 0; /* Remove margin from last button */
+                }
+
                 </style>
                 <script>
                     function toggleReplyForm(commentId) {
@@ -158,8 +237,8 @@ function displayPostAndComments($connect) {
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?chude_id=' . $chude_id; ?>" method="post">
                             <input type="hidden" name="baiviet_id" value="<?php echo $chude_id; ?>">
                             <div>
-                                <label for="noidung">Nội dung:</label><br>
-                                <textarea id="noidung" name="noidung" rows="4" cols="50" required></textarea><br>
+                                <label for="noidung" ></label><br>
+                                <textarea id="noidung" placeholder="Nhập bình luận" name="noidung" rows="4" cols="80" required></textarea><br>
                             </div>
                             <input type="submit" value="Gửi">
                         </form>
@@ -197,18 +276,42 @@ function displayPostAndComments($connect) {
                                                 <i class="far fa-comment"></i> Trả lời
                                             </button>
                                         </div>
+
                                         <div id="reply-form-<?php echo $comment['comment_id']; ?>" class="reply-form" style="display: none;">
                                             <form action="TraLoiBinhLuan.php" method="post">
                                                 <input type="hidden" name="binhluan_id" value="<?php echo $comment['comment_id']; ?>">
                                                 <input type="hidden" name="baiviet_id" value="<?php echo $chude_id; ?>">
                                                 <input type="hidden" name="nguoidung_id" value="<?php echo $_SESSION['nguoidung_id']; ?>">
                                                 <div>
-                                                    <label for="reply_content_<?php echo $comment['comment_id']; ?>">Nội dung:</label><br>
-                                                    <textarea id="reply_content_<?php echo $comment['comment_id']; ?>" name="reply_content" rows="2" cols="40" required></textarea><br>
+                                                    <label  for="reply_content_<?php echo $comment['comment_id']; ?>"></label><br>
+                                                    <textarea placeholder="Trả lời bình luận" id="reply_content_<?php echo $comment['comment_id']; ?>" name="reply_content" rows="3" cols="60" required></textarea><br>
                                                 </div>
                                                 <input type="submit" value="Gửi">
                                             </form>
                                         </div>
+
+                                        <!-- Hiển thị các câu trả lời -->
+                                        <?php
+                                        $sql_replies = "SELECT traloi.id AS reply_id, traloi.noidung AS reply_content, traloi.ngaytao AS reply_date, nguoidung.username AS reply_author 
+                                                    FROM traloi 
+                                                    JOIN nguoidung ON traloi.nguoidung_id = nguoidung.id 
+                                                    WHERE traloi.binhluan_id = ?";
+                                        $stmt_replies = $connect->prepare($sql_replies);
+                                        $stmt_replies->bind_param('i', $comment['comment_id']);
+                                        $stmt_replies->execute();
+                                        $replies_result = $stmt_replies->get_result();
+
+                                        if ($replies_result && $replies_result->num_rows > 0) {
+                                            while ($reply = $replies_result->fetch_assoc()) {
+                                                ?>
+                                                <div class="reply">
+                                                    <p><strong><?php echo htmlspecialchars($reply['reply_author']); ?>:</strong> <?php echo htmlspecialchars($reply['reply_content']); ?></p>
+                                                    <small><?php echo htmlspecialchars($reply['reply_date']); ?></small>
+                                                </div>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                                 <?php
@@ -218,6 +321,15 @@ function displayPostAndComments($connect) {
                         }
                         ?>
                     </div>
+
+
+                    <script>
+                        function toggleReplyForm(commentId) {
+                            var replyForm = document.getElementById('reply-form-' + commentId);
+                            replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+                        }
+                    </script>
+
                 </div>
             </body>
             </html>
@@ -230,7 +342,9 @@ function displayPostAndComments($connect) {
     }
 }
 
+
 handleLike($connect);
 handleNewComment($connect);
 displayPostAndComments($connect);
 ?>
+
