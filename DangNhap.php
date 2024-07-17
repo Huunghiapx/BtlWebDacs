@@ -12,6 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['dangnhap'])) {
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
                 $_SESSION['username'] = $row['username'];
+                $_SESSION['nguoidung_id'] = $row['id'];
                 echo "Đăng nhập thành công!";
                 // Chuyển hướng người dùng đến trang chủ hoặc trang nào đó sau khi đăng nhập thành công
                 header("Location: DienDan.php");
@@ -24,6 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['dangnhap'])) {
     }
 
 
+$connect->close();
+?>
 $connect->close();
 ?>
 
@@ -40,7 +43,7 @@ $connect->close();
     <h2>Đăng nhập/ Đăng ký</h2>
     <div class="container" id="container">
         <div class="form-container sign-up-container">
-            <form action="DangKy.php" method ="POST">
+            <form action="DangKy.php" method="POST">
                 <h1>Tạo tài khoản</h1>
                 <div class="social-container">
                     <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -48,14 +51,14 @@ $connect->close();
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div>
                 <span>Sử dụng email của bạn để đăng ký</span>
-                <input type="text" name="username" placeholder="Họ và tên" />
-                <input type="email" name="email"  placeholder="Email" />
-                <input type="password" name="password" placeholder="Password" />
-                <button name ="dangky">Đăng ký</button>
+                <input type="text" name="username" placeholder="Họ và tên" required />
+                <input type="email" name="email" placeholder="Email" required />
+                <input type="password" name="password" placeholder="Password" required />
+                <button name="dangky">Đăng ký</button>
             </form>
         </div>
         <div class="form-container sign-in-container">
-            <form action="DangNhap.php" method ="POST">
+            <form action="DangNhap.php" method="POST">
                 <h1>Đăng Nhập</h1>
                 <div class="social-container">
                     <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -63,17 +66,20 @@ $connect->close();
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div>
                 <span>Tài khoản của bạn</span>
-                <input type="email" name="email" placeholder="Email" />
-                <input type="password" name="password" placeholder="Password" />
+                <input type="email" name="email" placeholder="Email" required />
+                <input type="password" name="password" placeholder="Password" required />
                 <a href="#">Quên mật khẩu?</a>
                 <button name="dangnhap">Đăng nhập</button>
+                <?php if (isset($error_msg)) { ?>
+                    <p><?php echo $error_msg; ?></p>
+                <?php } ?>
             </form>
         </div>
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
                     <h1>Welcome Back!</h1>
-                    <p>VUi lòng nhập thông tin đăng nhập</p>
+                    <p>Vui lòng nhập thông tin đăng nhập</p>
                     <button class="ghost" id="signIn">Đăng Nhập</button>
                 </div>
                 <div class="overlay-panel overlay-right">
@@ -84,7 +90,5 @@ $connect->close();
             </div>
         </div>
     </div>
-
-  
 </body>
 </html>

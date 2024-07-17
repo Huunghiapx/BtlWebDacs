@@ -5,23 +5,48 @@ require_once('/xampp/htdocs/webdacs/BE/ketnoi.php');
 $sql_chuyenmuc = "SELECT * FROM chuyenmuc";
 $query_chuyenmuc = mysqli_query($connect, $sql_chuyenmuc);
 
+// Bắt đầu session
+session_start();
+if (!isset($_SESSION['nguoidung_id'])) {
+    header("Location: dangnhap.php");
+    exit();
+}
+$nguoidung_id = $_SESSION['nguoidung_id']; // Lấy ID người dùng từ session
+
+// Lấy username từ cơ sở dữ liệu
+$sql_get_username = "SELECT username FROM nguoidung WHERE id = ?";
+$stmt_get_username = $connect->prepare($sql_get_username);
+$stmt_get_username->bind_param('i', $nguoidung_id);
+$stmt_get_username->execute();
+$result_get_username = $stmt_get_username->get_result();
+if ($result_get_username->num_rows == 0) {
+    die('Lỗi: Người dùng không tồn tại.');
+}
+$row = $result_get_username->fetch_assoc();
+$username = $row['username'];
+
 // Kiểm tra nếu form được submit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Lấy dữ liệu từ form
     $chude = mysqli_real_escape_string($connect, $_POST['chude']);
     $noidung = mysqli_real_escape_string($connect, $_POST['noidung']);
-    $tacgia = mysqli_real_escape_string($connect, $_POST['tacgia']);
     $chuyenmuc_id = mysqli_real_escape_string($connect, $_POST['chuyenmuc_id']);
 
-    // Chuẩn bị câu lệnh SQL
-    $sql = "INSERT INTO baiviet (chude, noidung, tacgia, chuyenmuc_id) VALUES ('$chude', '$noidung', '$tacgia', '$chuyenmuc_id')";
+    // Chuẩn bị câu lệnh SQL để thêm bài viết vào cơ sở dữ liệu
+    $sql_add_post = "INSERT INTO baiviet (chude, noidung, tacgia, chuyenmuc_id) VALUES (?, ?, ?, ?)";
+    $stmt_add_post = $connect->prepare($sql_add_post);
 
-    // Thực thi câu lệnh SQL
-    if (mysqli_query($connect, $sql)) {
+    if ($stmt_add_post === false) {
+        die('Lỗi khi chuẩn bị câu lệnh SQL: ' . $connect->error);
+    }
+    $stmt_add_post->bind_param('sssi', $chude, $noidung, $username, $chuyenmuc_id);
+
+    // Thực thi câu lệnh SQL để thêm bài viết
+    if (!$stmt_add_post->execute()) {
+        die('Lỗi khi thực thi câu lệnh SQL: ' . $stmt_add_post->error);
+    } else {
         header("Location: diendan.php"); // Chuyển hướng đến trang thành công
         exit();
-    } else {
-        echo "Lỗi: " . $sql . "<br>" . mysqli_error($connect); // Hiển thị thông báo lỗi
     }
 }
 ?>
@@ -95,8 +120,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="text" id="chude" name="chude" required>
             <label for="noidung">Nội dung:</label>
             <textarea id="noidung" name="noidung" rows="4" required></textarea>
-            <label for="tacgia">Tác giả:</label>
-            <input type="text" id="tacgia" name="tacgia" required>
             <label for="chuyenmuc">Chuyên mục:</label>
             <select name="chuyenmuc_id" id="chuyenmuc" required>
                 <?php while ($row = mysqli_fetch_assoc($query_chuyenmuc)) { ?>

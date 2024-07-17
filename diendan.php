@@ -61,6 +61,18 @@ if ($query_count_binhluan) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diễn đàn</title>
     <link rel="stylesheet" href="CSS/styles.css">
+    <style>
+        .write-post-btn {
+                background-color: #007bff; /* Màu nền */
+                color: white; /* Màu chữ */
+                border: none; /* Loại bỏ đường viền */
+                padding:8px 15px; /* Độ lớn của nút */
+                border-radius: 3px; /* Bo tròn góc */
+                cursor: pointer; /* Con trỏ tay khi rê chuột vào */
+                margin: 3px;
+                transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+            }
+    </style>
 </head>
 <body>
     <div class="logo"><h1>Diễn đàn ô tô</h1></div>
@@ -72,7 +84,7 @@ if ($query_count_binhluan) {
                     <li><a href="TinTuc.php">Tin tức</a></li>
                     <li><a href="ThanhVien.php">Thành viên</a></li>
                     <li><a href="#">Tìm kiếm</a></li>
-                    <li><a href="DangNhap.php">Đăng nhập</a></li>
+                    <li><a href="DangXuat.php">Đăng xuất</a></li>
                 </ul>
             </div>
         </div>

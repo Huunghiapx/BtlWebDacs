@@ -14,7 +14,7 @@ body {
 }
 
 .container {
-    max-width: 1100px;
+    max-width: 1000px;
     margin: auto;
     padding: 0 20px;
 }
@@ -131,19 +131,8 @@ footer {
     align-items: center; /* Căn theo chiều dọc */
     
 }
-.write-post-btn {
-    background-color: #4CAF50; /* Màu nền */
-    color: white; /* Màu chữ */
-    padding: 10px 20px; /* Kích thước nút */
-    font-size: 16px; /* Cỡ chữ */
-    border: none; /* Loại bỏ viền */
-    border-radius: 4px; /* Bo tròn góc */
-    cursor: pointer;
-    transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
-}
-
 .write-post-btn:hover {
-    background-color: #45a049; /* Màu nền hover */
+    background-color: #4550a0; /* Màu nền hover */
 }
 .like-btn {
     background-color: transparent; /* Nền trong suốt */
@@ -157,3 +146,104 @@ footer {
 .like-btn:hover {
     color: #2980b9; /* Màu sắc của icon khi di chuột vào */
 }
+
+.write-post-btn {
+    background-color: #007bff; /* Màu nền */
+    color: white; /* Màu chữ */
+    border: none; /* Loại bỏ đường viền */
+    padding:8px 15px; /* Độ lớn của nút */
+    border-radius: 3px; /* Bo tròn góc */
+    cursor: pointer; /* Con trỏ tay khi rê chuột vào */
+    margin: 3px;
+    transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+}
+.write-post-btn {
+    margin-right: 10px;
+}
+
+.write-post-btn-container {
+    margin-left: 10px; /* Spacing between button and title */
+    display: flex;
+    justify-content: space-between; /* Evenly distribute child elements */
+    align-items: center; /* Align  vertically */
+}
+
+.comments-section {
+    margin-top: 20px; /* Top margin for comments section */
+    margin: auto;
+}
+
+.comment_baiviet {
+    border: 1px solid #ccc; /* Border around each comment */
+    border-radius: 5px; /* Rounded corners */
+    margin-bottom: 15px; /* Spacing between comments */
+    padding: 10px; /* Padding inside the comment box */
+    margin: auto;
+}
+
+.box-comment-user {
+    display: flex;
+    justify-content: space-between; /* Phân bố các phần tử một cách đồng đều */
+    align-items: center; /* Căn chỉnh theo chiều dọc */
+    margin-bottom: 10px; /* Khoảng cách phía dưới */
+}
+
+.left-content {
+    flex: 1; /* Phần bên trái sẽ chiếm hết không gian có thể */
+    text-align: left; /* Căn chỉnh nội dung về bên trái */
+}
+
+.right-content {
+    flex: 1; /* Phần bên phải sẽ chiếm hết không gian có thể */
+    text-align: right; /* Căn chỉnh nội dung về bên phải */
+}
+
+.box-comment-act {
+    display: flex;
+    justify-content: space-between; /* Căn hai phần tử con một cách đều nhau */
+    align-items: center; /* Căn theo chiều dọc */
+    margin-top: 10px; /* Khoảng cách với phần nội dung comment */
+   
+    padding-bottom: 5px; /* Khoảng cách phía dưới */
+}
+.rep-comment{
+    display: flex;
+    justify-content: space-between; /* Căn hai phần tử con một cách đều nhau */
+    align-items: center; /* Căn theo chiều dọc */
+    margin-top: 10px; /* Khoảng cách với phần nội dung comment */
+    border-bottom: 1px solid #eee; /* Đường viền dưới cùng */
+    padding-bottom: 5px; /* Khoảng cách phía dưới */
+    
+}
+
+.rep-comment-btn,
+.like-comment-btn {
+    background-color: #007bff; /* Màu nền */
+    color: white; /* Màu chữ */
+    border: none; /* Loại bỏ đường viền */
+    padding: 5px 10px; /* Độ lớn của nút */
+    border-radius: 3px; /* Bo tròn góc */
+    cursor: pointer; /* Con trỏ tay khi rê chuột vào */
+    margin: 3px;
+}
+
+.rep-comment-btn:hover,
+.like-comment-btn:hover {
+    background-color: #0056b3; /* Màu nền khi rê chuột vào */
+}
+
+.right {
+    margin-left: auto; /* Dịch phần tử sang bên phải */
+    display: flex;
+    align-items: center; /* Căn theo chiều dọc */
+}
+
+.table {
+    width: 100%; /* Full width table */
+    margin-top: 10px; /* Top margin */
+}
+
+.table p {
+    margin: 0; /* Remove default margin for paragraphs inside tables */
+}
+
