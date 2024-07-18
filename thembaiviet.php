@@ -56,26 +56,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thêm Bài Viết</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="CSS/styles.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 600px; /* Tăng chiều rộng của form */
-        }
-        h2 {
+       * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+
+    /* Global Styles */
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #f8f8f8;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: auto;
+        padding: 0 20px;
+    }
+
+    /* Header Styles */
+    .header-container {
+        background-color: #333;
+        padding: 20px 0;
+    }
+
+    .nav ul {
+        list-style-type: none;
+        text-align: center;
+    }
+
+    .nav ul li {
+        display: inline-block;
+        margin-right: 20px;
+    }
+
+    .nav ul li a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 18px;
+    }
+
+    /* Logo Styles */
+    .logo {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .logo h1 {
+        color: #333;
+        font-size: 36px;
+    }
+            h2 {
             margin-bottom: 20px;
             color: #333;
         }
@@ -113,6 +148,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
+    <div class="logo"><h1>Diễn đàn ô tô</h1></div>
+    <header>
+        <div class="header-container">
+            <div class="nav">
+                <ul>
+                    <li><a href="DienDan.php">Diễn đàn</a></li>
+                    <li><a href="TinTuc.php">Tin tức</a></li>
+                    <li><a href="ThanhVien.php">Thành viên</a></li>
+                    <li><a href="#">Tìm kiếm</a></li>
+                    <li><a href="DangXuat.php">Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
     <div class="container">
         <h2>Thêm Bài Viết Mới</h2>
         <form action="thembaiviet.php" method="post">

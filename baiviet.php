@@ -3,6 +3,7 @@ require_once('/xampp/htdocs/webdacs/BE/ketnoi.php');
 session_start();
 
 // Xử lý khi người dùng nhấn nút "Thích"
+// Xử lý khi người dùng nhấn nút "Thích"
 function handleLike($connect) {
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && isset($_POST['id'])) {
         $id = intval($_POST['id']);
@@ -11,6 +12,8 @@ function handleLike($connect) {
             $sql_update_likes = "UPDATE baiviet SET luotthich = luotthich + 1 WHERE id = ?";
         } elseif ($_POST['action'] == 'like_comment') {
             $sql_update_likes = "UPDATE binhluan SET thichbinhluan = thichbinhluan + 1 WHERE id = ?";
+        } elseif ($_POST['action'] == 'like_comment_rep') {
+            $sql_update_likes = "UPDATE traloi SET thichtraloi = thichtraloi + 1 WHERE id = ?";
         }
 
         $stmt_update_likes = $connect->prepare($sql_update_likes);
@@ -22,6 +25,7 @@ function handleLike($connect) {
         exit;
     }
 }
+
 
 // Xử lý khi người dùng gửi form thêm bình luận
 function handleNewComment($connect) {
@@ -137,10 +141,10 @@ function displayPostAndComments($connect) {
                     background-color: transparent;
                     color: #3498db;
                     border: none;
-                    padding: 8px 15px;
+                    padding: 7px 10px;
                     border-radius: 3px;
                     cursor: pointer;
-                    margin-right: 10px;
+                    margin-right: 1px;
                     transition: background-color 0.3s, color 0.3s;
                 }
 
@@ -166,6 +170,55 @@ function displayPostAndComments($connect) {
 
                 .like-comment .write-post-btn-container .write-post-btn:last-child {
                     margin-right: 0; /* Remove margin from last button */
+                }
+
+                /*nut tlbl*/
+                .reply {
+                    display: flex;
+                    align-items: center; /* Căn các phần tử theo chiều dọc */
+                }
+
+                .reply .write-post-btn-container {
+                    display: flex;
+                    align-items: center; /* Căn các phần tử theo chiều dọc */
+                }
+
+                .reply .write-post-btn {
+                    background-color: transparent;
+                    color: #3498db;
+                    border: none;
+                    padding: 8px 15px;
+                    border-radius: 3px;
+                    cursor: pointer;
+                    margin-right: 10px;
+                    transition: background-color 0.3s, color 0.3s;
+                }
+
+                .reply .write-post-btn:hover {
+                    background-color: #4550a0;
+                    color: white;
+                }
+
+                .reply .write-post-btn i {
+                    margin-right: 5px; /* Space between icon and text */
+                }
+
+                .reply .write-post-btn-container {
+                    margin-left: 10px; /* Khoảng cách giữa nút và tiêu đề */
+                    display: flex;
+                    justify-content: space-between; /* Căn hai phần tử con một cách đều nhau */
+                    align-items: center; /* Căn theo chiều dọc */
+                }
+
+                .reply .write-post-btn-container .write-post-btn {
+                    margin-right: 10px; /* Space between buttons */
+                }
+
+                .reply .write-post-btn-container .write-post-btn:last-child {
+                    margin-right: 0; /* Remove margin from last button */
+                }
+                .rep_comment {
+                    margin-left: 50px;
                 }
 
                 </style>
@@ -275,6 +328,8 @@ function displayPostAndComments($connect) {
                                             <button class="write-post-btn" onclick="toggleReplyForm(<?php echo $comment['comment_id']; ?>)">
                                                 <i class="far fa-comment"></i> Trả lời
                                             </button>
+                                            <button class="write-post-btn">Chỉnh sửa</buton>
+                                            <button class="write-post-btn">Xóa</button>
                                         </div>
 
                                         <div id="reply-form-<?php echo $comment['comment_id']; ?>" class="reply-form" style="display: none;">
@@ -292,7 +347,7 @@ function displayPostAndComments($connect) {
 
                                         <!-- Hiển thị các câu trả lời -->
                                         <?php
-                                        $sql_replies = "SELECT traloi.id AS reply_id, traloi.noidung AS reply_content, traloi.ngaytao AS reply_date, nguoidung.username AS reply_author 
+                                        $sql_replies = "SELECT traloi.id AS reply_id, traloi.noidung AS reply_content, traloi.ngaytao AS reply_date, nguoidung.username AS reply_author, traloi.thichtraloi AS reply_likes 
                                                     FROM traloi 
                                                     JOIN nguoidung ON traloi.nguoidung_id = nguoidung.id 
                                                     WHERE traloi.binhluan_id = ?";
@@ -304,9 +359,28 @@ function displayPostAndComments($connect) {
                                         if ($replies_result && $replies_result->num_rows > 0) {
                                             while ($reply = $replies_result->fetch_assoc()) {
                                                 ?>
-                                                <div class="reply">
-                                                    <p><strong><?php echo htmlspecialchars($reply['reply_author']); ?>:</strong> <?php echo htmlspecialchars($reply['reply_content']); ?></p>
-                                                    <small><?php echo htmlspecialchars($reply['reply_date']); ?></small>
+                                                <div class="rep_comment">
+                                                    <div class="reply">
+                                                        <p><strong><?php echo htmlspecialchars($reply['reply_author']); ?>:</strong> <?php echo htmlspecialchars($reply['reply_content']); ?></p>
+                                                        
+                                                    </div>
+                                                    <div class="like-comment">
+                                                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?chude_id=' . $chude_id; ?>">
+                                                        <input type="hidden" name="id" value="<?php echo $reply['reply_id']; ?>">
+                                                        <input type="hidden" name="action" value="like_comment_rep">
+                                                        <button class="write-post-btn">
+                                                            <i class="fas fa-thumbs-up"></i> Like
+                                                        </button>
+                                                        <?php if ($reply['reply_likes'] > 0) { ?>
+                                                            <?php echo htmlspecialchars($reply['reply_likes']); ?>
+                                                        <?php } ?>
+                                                    </form>
+                                                    <button class="write-post-btn" onclick="toggleReplyForm(<?php echo $comment['comment_id']; ?>)">
+                                                        <i class="far fa-comment"></i> Trả lời
+                                                    </button>
+                                                        <button class="write-post-btn">Chỉnh sửa</buton>
+                                                        <button class="write-post-btn">Xóa</button> <small><?php echo htmlspecialchars($reply['reply_date']); ?></small>
+                                                    </div>
                                                 </div>
                                                 <?php
                                             }

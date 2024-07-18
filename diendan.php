@@ -71,7 +71,33 @@ if ($query_count_binhluan) {
                 cursor: pointer; /* Con trỏ tay khi rê chuột vào */
                 margin: 3px;
                 transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
-            }
+        }
+        /* Định dạng cơ bản cho liên kết */
+        a {
+            color: #3498db; /* Màu xanh dương */
+            text-decoration: none; /* Bỏ gạch chân */
+            transition: color 0.3s ease; /* Hiệu ứng chuyển màu khi di chuột */
+        }
+
+        /* Thêm hiệu ứng khi di chuột lên liên kết */
+        a:hover {
+            color: #4550a0; /* Màu xanh đậm hơn khi di chuột */
+        }
+
+        /* Định dạng liên kết trong danh sách bài viết (nếu có) */
+        .post-link {
+            display: block; /* Hiển thị như một khối */
+            padding: 10px; /* Khoảng cách bên trong liên kết */
+            border: 1px solid #ddd; /* Đường viền xám nhạt */
+            margin-bottom: 10px; /* Khoảng cách giữa các liên kết */
+            border-radius: 5px; /* Bo tròn các góc */
+            background-color: #f9f9f9; /* Màu nền nhạt */
+            transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền khi di chuột */
+        }
+
+        .post-link:hover {
+            background-color: #f0f0f0; /* Màu nền đậm hơn khi di chuột */
+        }
     </style>
 </head>
 <body>
@@ -120,7 +146,10 @@ if ($query_count_binhluan) {
                                         while($row = mysqli_fetch_assoc($query_baiviet)){ ?>
                                             <tr>
                                                 <td><?php echo $row['id']; ?></td>
-                                                <td><a href="baiviet.php?chude_id=<?php echo $row['id']; ?>"><?php echo isset($row['chude']) ? $row['chude'] : 'Không xác định'; ?></a></td>
+                                                <td><a href="baiviet.php?chude_id=<?php echo $row['id']; ?>" class="post-link">
+                                                    <?php echo isset($row['chude']) ? htmlspecialchars($row['chude']) : 'Không xác định'; ?>
+                                                </a>
+                                                </td>
                                                 <td><?php echo $row['ten_chuyenmuc']; ?></td>
                                                 <td><?php echo isset($binhluan_counts[$row['id']]) ? $binhluan_counts[$row['id']] : 0; ?></td>
                                                 <td><?php echo isset($row['luotthich']) ? $row['luotthich'] : 0; ?></td>

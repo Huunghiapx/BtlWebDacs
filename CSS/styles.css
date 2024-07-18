@@ -52,6 +52,34 @@ body {
     font-size: 36px;
 }
 
+/* Định dạng cơ bản cho liên kết */
+a {
+    color: #3498db; /* Màu xanh dương */
+    text-decoration: none; /* Bỏ gạch chân */
+    transition: color 0.3s ease; /* Hiệu ứng chuyển màu khi di chuột */
+}
+
+/* Thêm hiệu ứng khi di chuột lên liên kết */
+a:hover {
+    color: #4550a0; /* Màu xanh đậm hơn khi di chuột */
+}
+
+/* Định dạng liên kết trong danh sách bài viết (nếu có) */
+.post-link {
+    display: block; /* Hiển thị như một khối */
+    padding: 10px; /* Khoảng cách bên trong liên kết */
+    border: 1px solid #ddd; /* Đường viền xám nhạt */
+    margin-bottom: 10px; /* Khoảng cách giữa các liên kết */
+    border-radius: 5px; /* Bo tròn các góc */
+    background-color: #f9f9f9; /* Màu nền nhạt */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền khi di chuột */
+}
+
+.post-link:hover {
+    background-color: #f0f0f0; /* Màu nền đậm hơn khi di chuột */
+}
+
+
 /* Card Styles */
 .card {
     background-color: #fff;
