@@ -209,8 +209,15 @@ function displayPostAndComments($connect) {
                 <link rel="stylesheet" href="CSS/style2.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
                 <style>
- 
+                
                 </style>
+                 <script>
+                    function toggleReplyForm(commentId) {
+                        var replyForm = document.getElementById('reply-form-' + commentId);
+                        replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+                    }
+                </script>
+                            
                 
             </head>
             <body>
@@ -240,6 +247,7 @@ function displayPostAndComments($connect) {
                                 </p>
                             </div>
                             <div class="card-body">
+                           
                                 <table class="table">
                                     <tr>
                                         <td>
@@ -372,13 +380,7 @@ function displayPostAndComments($connect) {
                                                 }
                                             }
                                             </script>   
-                                            <script>
-                                                function toggleReplyForm(commentId) {
-                                                    var replyForm = document.getElementById('reply-form-' + commentId);
-                                                    replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
-                                                }
-                                            </script>
-                            
+                                           
                                             <form method="POST" action="">
                                                 <input type="hidden" name="action_delete" value="delete_comment">
                                                 <input type="hidden" name="comment_id" value="<?php echo $comment['comment_id']; ?>">

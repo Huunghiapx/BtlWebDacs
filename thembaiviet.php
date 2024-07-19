@@ -175,6 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="<?php echo $row['id']; ?>"><?php echo $row['ten']; ?></option>
                 <?php } ?>
             </select>
+            
             <input type="submit" value="Thêm Bài Viết">
         </form>
     </div>

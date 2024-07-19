@@ -66,6 +66,7 @@ $query_thanhvien = mysqli_query($connect, $sql_thanhvien);
                     <li><a href="TinTuc.php">Tin tức</a></li>
                     <li><a href="ThanhVien.php">Thành viên</a></li>
                     <li><a href="#">Tìm kiếm</a></li>
+                    <li><a href="DangXuat.php">Đăng xuất</a></li>
                 </ul>
             </div>
         </div>
