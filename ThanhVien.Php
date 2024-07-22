@@ -56,6 +56,39 @@ $query_thanhvien = mysqli_query($connect, $sql_thanhvien);
     <title>Diễn đàn</title>
     <link rel="stylesheet" href="CSS/styles.css">
 </head>
+<link rel="stylesheet" href="CSS/style2.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .search-container form {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        
+    }
+    
+    .search-container input[type="text"] {
+        padding: 10px 40px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-right: 5px;
+    }
+
+    .search-container button {
+        padding: 8px 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .search-container button:hover {
+        background-color: #0056b3;
+    }
+
+
+</style>
 <body>
 <div class="logo"><h1>Diễn đàn ô tô</h1></div>
     <header>
@@ -63,15 +96,19 @@ $query_thanhvien = mysqli_query($connect, $sql_thanhvien);
             <div class="nav">
                 <ul>
                     <li><a href="DienDan.php">Diễn đàn</a></li>
-                    <li><a href="TinTuc.php">Tin tức</a></li>
-                    <li><a href="ThanhVien.php">Thành viên</a></li>
-                    <li><a href="#">Tìm kiếm</a></li>
-                    <li><a href="DangXuat.php">Đăng xuất</a></li>
+                    <li><a href="Thanhvien.php">Thành Viên</a></li>               
+                    <li><a href="Dangnhap.php">Đăng xuất</a></li>
+                    
                 </ul>
             </div>
         </div>
     </header>
-   
+    <div class="search-container">
+        <form action="timkiem.php" method="GET">
+            <input type="text" name="query" placeholder="Tìm kiếm..." required>
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
     <main>
         <div class="container">
             <!-- Phần hiển thị các bài viết -->

@@ -15,28 +15,28 @@ $query_chuyenmuc = mysqli_query($connect, $sql_chuyenmuc);
 $sql_diendan_chinh = "SELECT * FROM chuyenmuc WHERE danhmuc_id = 1";
 $query_diendan_chinh = mysqli_query($connect, $sql_diendan_chinh);
 
-$sql_tin_tuc = "SELECT * FROM chuyenmuc WHERE danhmuc_id = 2"; // ID của danh mục "Tin Tức"
+$sql_tin_tuc = "SELECT * FROM chuyenmuc WHERE danhmuc_id = 2"; 
 $query_tin_tuc = mysqli_query($connect, $sql_tin_tuc);
 
-$sql_kien_thuc = "SELECT * FROM chuyenmuc WHERE danhmuc_id = 3"; // ID của danh mục "Kiến Thức"
+$sql_kien_thuc = "SELECT * FROM chuyenmuc WHERE danhmuc_id = 3";
 $query_kien_thuc = mysqli_query($connect, $sql_kien_thuc);
 
-$sql_mua_ban = "SELECT * FROM chuyenmuc WHERE danhmuc_id = 4"; // ID của danh mục "Mua Bán"
+$sql_mua_ban = "SELECT * FROM chuyenmuc WHERE danhmuc_id = 4"; 
 $query_mua_ban = mysqli_query($connect, $sql_mua_ban);
 
-$sql_giai_tri = "SELECT * FROM chuyenmuc WHERE danhmuc_id = 5"; // ID của danh mục "Giải Trí"
+$sql_giai_tri = "SELECT * FROM chuyenmuc WHERE danhmuc_id = 5"; 
 $query_giai_tri = mysqli_query($connect, $sql_giai_tri);
 
-// Truy vấn số bài viết cho mỗi chuyên mục
+
 $sql_count_baiviet = "SELECT chuyenmuc_id, COUNT(*) AS total_baiviet FROM baiviet GROUP BY chuyenmuc_id";
 $query_count_baiviet = mysqli_query($connect, $sql_count_baiviet);
 
-// Lưu kết quả vào một mảng để dễ dàng truy cập
+
 $baiviet_counts = array();
 while($row = mysqli_fetch_assoc($query_count_baiviet)) {
     $baiviet_counts[$row['chuyenmuc_id']] = $row['total_baiviet'];
 }
-// Truy vấn số bình luận cho mỗi chuyên mục
+
 $sql_count_binhluan = "SELECT baiviet.id AS baiviet_id, COUNT(binhluan.id) AS total_binhluan 
                        FROM baiviet 
                        LEFT JOIN binhluan ON baiviet.id = binhluan.baiviet_id 
@@ -44,13 +44,13 @@ $sql_count_binhluan = "SELECT baiviet.id AS baiviet_id, COUNT(binhluan.id) AS to
 $query_count_binhluan = mysqli_query($connect, $sql_count_binhluan);
 
 if ($query_count_binhluan) {
-    // Lưu kết quả vào một mảng để dễ dàng truy cập
+ 
     $binhluan_counts = array();
     while($row = mysqli_fetch_assoc($query_count_binhluan)) {
         $binhluan_counts[$row['baiviet_id']] = $row['total_binhluan'];
     }
 } else {
-    // Xử lý lỗi truy vấn
+  
     echo "Lỗi truy vấn: " . mysqli_error($connect);
 }
 ?>
@@ -61,43 +61,71 @@ if ($query_count_binhluan) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diễn đàn</title>
     <link rel="stylesheet" href="CSS/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .write-post-btn {
-                background-color: #007bff; /* Màu nền */
-                color: white; /* Màu chữ */
-                border: none; /* Loại bỏ đường viền */
-                padding:8px 15px; /* Độ lớn của nút */
-                border-radius: 3px; /* Bo tròn góc */
-                cursor: pointer; /* Con trỏ tay khi rê chuột vào */
+                background-color: #007bff; 
+                color: white; 
+                border: none;
+                padding:8px 15px; 
+                border-radius: 3px; 
+                cursor: pointer; 
                 margin: 3px;
-                transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+                transition: background-color 0.3s; 
         }
-        /* Định dạng cơ bản cho liên kết */
+       
         a {
-            color: #3498db; /* Màu xanh dương */
-            text-decoration: none; /* Bỏ gạch chân */
-            transition: color 0.3s ease; /* Hiệu ứng chuyển màu khi di chuột */
+            color: #3498db;
+            text-decoration: none; 
+            transition: color 0.3s ease; 
         }
 
-        /* Thêm hiệu ứng khi di chuột lên liên kết */
         a:hover {
-            color: #4550a0; /* Màu xanh đậm hơn khi di chuột */
+            color: #4550a0; 
         }
 
-        /* Định dạng liên kết trong danh sách bài viết (nếu có) */
         .post-link {
-            display: block; /* Hiển thị như một khối */
-            padding: 10px; /* Khoảng cách bên trong liên kết */
-            border: 1px solid #ddd; /* Đường viền xám nhạt */
-            margin-bottom: 10px; /* Khoảng cách giữa các liên kết */
-            border-radius: 5px; /* Bo tròn các góc */
-            background-color: #f9f9f9; /* Màu nền nhạt */
-            transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền khi di chuột */
+            display: block; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            margin-bottom: 10px; 
+            border-radius: 5px; 
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease; 
         }
 
         .post-link:hover {
-            background-color: #f0f0f0; /* Màu nền đậm hơn khi di chuột */
+            background-color: #f0f0f0;
         }
+        .search-container form {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            
+        }
+        
+        .search-container input[type="text"] {
+            padding: 10px 30px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        .search-container button {
+            padding: 8px 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: #0056b3;
+        }
+
+
     </style>
 </head>
 <body>
@@ -107,14 +135,22 @@ if ($query_count_binhluan) {
             <div class="nav">
                 <ul>
                     <li><a href="DienDan.php">Diễn đàn</a></li>
-                    <li><a href="TinTuc.php">Tin tức</a></li>
+                    <li><a href="TinTuc.php">Tin Tức</a></li>
                     <li><a href="ThanhVien.php">Thành viên</a></li>
-                    <li><a href="#">Tìm kiếm</a></li>
-                    <li><a href="DangXuat.php">Đăng xuất</a></li>
+                    <li><a href="Dangnhap.php">Đăng xuất</a></li>
+                    
                 </ul>
             </div>
+            
         </div>
     </header>
+    <div class="search-container">
+        <form action="timkiem.php" method="GET">
+            <input type="text" name="query" placeholder="Tìm kiếm..." required>
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+
    
     <main>
         <div class="container">
@@ -150,7 +186,9 @@ if ($query_count_binhluan) {
                                                     <?php echo isset($row['chude']) ? htmlspecialchars($row['chude']) : 'Không xác định'; ?>
                                                 </a>
                                                 </td>
-                                                <td><?php echo $row['ten_chuyenmuc']; ?></td>
+                                                <td><a href="chuyenmuc.php?chuyenmuc_id=<?php echo $row['id']; ?>" class="post-link">
+                                                    <?php echo isset($row['ten_chuyenmuc']) ? htmlspecialchars($row['ten_chuyenmuc']) : 'Không xác định'; ?>
+                                                </td>
                                                 <td><?php echo isset($binhluan_counts[$row['id']]) ? $binhluan_counts[$row['id']] : 0; ?></td>
                                                 <td><?php echo isset($row['luotthich']) ? $row['luotthich'] : 0; ?></td>
                                                 <td><?php echo $row['tacgia']; ?></td>

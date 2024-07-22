@@ -92,3 +92,63 @@
     .rep_comment {
         margin-left: 50px;
     }
+
+
+    /* CSS cho phần header */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+}
+
+.nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.nav li {
+    margin-right: 15px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.nav a:hover {
+    text-decoration: underline;
+}
+
+/* CSS cho ô tìm kiếm */
+.search-container form {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    
+}
+
+.search-container input[type="text"] {
+    padding: 10px 30px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.search-container button {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-container button:hover {
+    background-color: #0056b3;
+}
+

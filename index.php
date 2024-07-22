@@ -69,8 +69,6 @@ if ($query_count_binhluan) {
             <div class="nav">
                 <ul>
                     <li><a href="DienDan.php">Diễn đàn</a></li>
-                    <li><a href="TinTuc.php">Tin tức</a></li>
-                    <li><a href="ThanhVien.php">Thành viên</a></li>
                     <li><a href="#">Tìm kiếm</a></li>
                     <li><a href="DangNhap.php">Đăng nhập/Đăng Ký</a></li>
                 </ul>

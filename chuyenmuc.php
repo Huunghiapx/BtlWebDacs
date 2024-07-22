@@ -83,11 +83,8 @@ $query_thanhvien = mysqli_query($connect, $sql_thanhvien);
             <div class="nav">
                 <ul>
                     <li><a href="DienDan.php">Diễn đàn</a></li>
-                    <li><a href="Dangnhap.php">Tin Tức</a></li>
                     <li><a href="Thanhvien.php">Thành Viên</a></li>
-
                     <li><a href="Dangnhap.php">Đăng xuất</a></li>
-                    
                 </ul>
             </div>
         </div>
